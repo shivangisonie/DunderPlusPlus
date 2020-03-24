@@ -1,2 +1,5 @@
 # Hello Mifflin
 PRINT OUT "How's my favorite branch doing?"
+I DECLARE val AS
+SUM OF 3 + 2
+# PRINT OUT val

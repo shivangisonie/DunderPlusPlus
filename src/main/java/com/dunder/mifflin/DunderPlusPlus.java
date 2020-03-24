@@ -41,20 +41,28 @@ public class DunderPlusPlus {
     private static void readFile(String fileName) throws MifflinException, DunderException {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
+            int lineNumber = 0;
             while ((line = bufferedReader.readLine()) != null) {
+                lineNumber++;
                 // Check if line is a comment
                 if (line.trim().startsWith("#")) {
                     continue;
                 }
-                Operation operation = LineParser.parse(line);
-                if (!operation.isBlockStarter()) {
-                    operation.process();
+                try {
+                    Operation operation = LineParser.parse(line);
+                    if (!operation.isBlockStarter()) {
+                        operation.process();
+                    }
+                } catch (DunderException e) {
+                    System.err.println("Exception: " + e.getMessage() + " at line " + lineNumber);
+                    e.printStackTrace();
+                    break;
                 }
             }
         } catch (FileNotFoundException | NoSuchFileException fne) {
             throw new MifflinException("File " + fileName + " not found");
-        } catch (IOException ioe) {
-            throw new DunderException(ioe);
+        } catch (IOException e) {
+            throw new DunderException(e);
         }
     }
 }

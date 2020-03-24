@@ -3,32 +3,28 @@ package com.dunder.mifflin;
 import com.dunder.mifflin.exceptions.DunderException;
 import com.dunder.mifflin.operations.Operation;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LineParser {
 
+    // Pattern to split operator and operand
+    private static Pattern pattern = Pattern.compile("[a-z]|\\d|\"|'");
+
     public static Operation parse(String line) throws DunderException {
-        char[] splitters = new char[] {'\"', '\''};
-        int lineIndex = firstVariableIndex(line);
+        int opIndex = getOperandIndex(line);
 
-        // Find the index of first splitter to occur in line
-        for (int i = 0 ; i < splitters.length ; i++) {
-            int sIndex = line.indexOf(splitters[i]);
-            if (sIndex >= 0) {
-                if (lineIndex > sIndex) {
-                    lineIndex = sIndex;
-                }
-            }
-        }
+        String instruction = line.substring(0, opIndex).trim();
+        String operand = line.substring(opIndex).trim();
 
-        String instruction = line.substring(0, lineIndex).trim();
-        String operand = line.substring(lineIndex).trim();
-
-        Operation operation = Instructions.get(instruction);
-        operation.parseAndInitialize(operand);
-
-        return operation;
+        return Instructions.get(instruction, operand);
     }
 
-    private static int firstVariableIndex(String line) {
+    private static int getOperandIndex(String line) {
+        Matcher matcher = pattern.matcher(line);
+        int index = matcher.find() ? matcher.start() : -1;
+
+        if (index>=0) return index;
         return line.length();
     }
 }

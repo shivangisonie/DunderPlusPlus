@@ -2,23 +2,19 @@ package com.dunder.mifflin.operations;
 
 import com.dunder.mifflin.exceptions.InvalidOperandsException;
 
-// TODO: Handle variables
-public class PrintOperation implements Operation {
+// TODO: Implement Sum
+public class SumOperation implements Operation {
     private String string = null;
     private String operands;
 
-    public PrintOperation(String operands) throws InvalidOperandsException {
+    public SumOperation(String operands) throws InvalidOperandsException {
         this.operands = operands;
         this.parseAndInitialize(operands);
     }
 
     @Override
     public void parseAndInitialize(String operands) throws InvalidOperandsException {
-        if (operands.startsWith("\"") && operands.endsWith("\"")) {
-            this.string = operands.substring(1, operands.length() - 1);
-        } else {
-            throw new InvalidOperandsException();
-        }
+        this.string = operands;
     }
 
     @Override
