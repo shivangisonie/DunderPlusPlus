@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class LineParser {
 
     // Pattern to split operator and operand
-    private static Pattern pattern = Pattern.compile("[a-z]|\\d|\"|'");
+    private static Pattern pattern = Pattern.compile("[a-z]|\\d|\"|'|\\+|-");
 
     public static Operation parse(String line) throws DunderException {
         int opIndex = getOperandIndex(line);
