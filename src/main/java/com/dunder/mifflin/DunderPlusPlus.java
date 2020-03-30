@@ -42,20 +42,24 @@ public class DunderPlusPlus {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
             int lineNumber = 0;
+            Scope scope = new Scope();
             while ((line = bufferedReader.readLine()) != null) {
                 lineNumber++;
                 // Check if line is a comment
-                if (line.trim().startsWith("#")) {
+                if (line.trim().startsWith("#") || line.trim().isEmpty()) {
                     continue;
                 }
                 try {
                     Operation operation = LineParser.parse(line);
                     if (!operation.isBlockStarter()) {
-                        operation.process();
+                        scope = operation.process(scope);
                     }
                 } catch (DunderException e) {
-                    System.err.println("Exception: " + e.getMessage() + " at line " + lineNumber);
+                    System.err.println(line + "\n" + e.getClass().toString().substring(6) + ": " + e.getMessage() + "(" + fileName + ":" + lineNumber + ")");
                     e.printStackTrace();
+                    break;
+                } catch (MifflinException e) {
+                    System.err.println(line + "\n" + e.getClass().toString().substring(6) + ": " + e.getMessage() + "(" + fileName + ":" + lineNumber + ")");
                     break;
                 }
             }

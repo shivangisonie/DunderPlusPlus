@@ -1,5 +1,26 @@
 # Hello Mifflin
+
+# Print string
 PRINT OUT "How's my favorite branch doing?"
+
+# Declare variable in multiple lines
 I DECLARE val AS
-SUM OF 3 + 2
-# PRINT OUT val
+SUM OF 4 AND 2 AND 0
+
+# Print declared variable
+PRINT OUT val
+
+# Declare string variable
+I DECLARE val2 AS "test"
+
+# Print string variable
+PRINT OUT val2
+
+# Print integer number
+PRINT OUT 10
+
+# Print negative integer number
+PRINT OUT -10
+
+# Print decimal number
+PRINT OUT 12.13

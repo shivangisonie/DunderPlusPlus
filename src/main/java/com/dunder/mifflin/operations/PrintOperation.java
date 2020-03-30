@@ -1,29 +1,74 @@
 package com.dunder.mifflin.operations;
 
+import com.dunder.mifflin.Scope;
 import com.dunder.mifflin.exceptions.InvalidOperandsException;
+import com.dunder.mifflin.exceptions.MifflinException;
 
-// TODO: Handle variables
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PrintOperation implements Operation {
-    private String string = null;
     private String operands;
+    private boolean isVariable = false;
 
     public PrintOperation(String operands) throws InvalidOperandsException {
-        this.operands = operands;
         this.parseAndInitialize(operands);
     }
 
     @Override
     public void parseAndInitialize(String operands) throws InvalidOperandsException {
-        if (operands.startsWith("\"") && operands.endsWith("\"")) {
-            this.string = operands.substring(1, operands.length() - 1);
+        String quoteValue = parseQuotes(operands);
+
+        if (!quoteValue.equals(operands)) {
+            this.operands = quoteValue;
+            this.isVariable = false;
         } else {
-            throw new InvalidOperandsException();
+            // Check if operand is a number
+            if (isNumber(quoteValue)) {
+                this.operands = quoteValue;
+                this.isVariable = false;
+            } else if (!operands.isEmpty()) {
+                this.operands = operands;
+                this.isVariable = true;
+            } else {
+                throw new InvalidOperandsException();
+            }
         }
     }
 
     @Override
-    public void process() {
-        System.out.println(string);
+    public Scope process(Scope scope) {
+        try {
+            String value = operands;
+            if (this.isVariable) {
+                value = scope.getContext().getVariable(operands);
+                value = parseQuotes(value);
+            }
+            System.out.println(value);
+        } catch (NullPointerException e) {
+            throw new MifflinException("Variable \"" + operands + "\" might not have been initialised");
+        }
+        return scope;
+    }
+
+    private String parseQuotes(String value) {
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            return value.substring(1, value.length() - 1);
+        }
+        return value;
+    }
+
+    private boolean isNumber(String value) {
+        try {
+            Matcher matcher = Pattern.compile("[+-]?(\\d+(?:\\.\\d+)?)").matcher(value);
+            if (matcher.find() && matcher.group().equals(value)) {
+                return true;
+            }
+        } catch(IllegalStateException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
     }
 
     @Override
