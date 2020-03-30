@@ -1,6 +1,8 @@
 package com.dunder.mifflin.exceptions;
 
 public class InstructionNotFoundException extends DunderException {
+    private static final long serialVersionUID = 7519067956414717084L;
+
     public InstructionNotFoundException() {
         super();
     }

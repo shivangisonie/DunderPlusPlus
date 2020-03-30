@@ -5,6 +5,8 @@ package com.dunder.mifflin.exceptions;
  * For unchecked exception use MifflinException.
  */
 public class DunderException extends Exception {
+    private static final long serialVersionUID = 8743988004082184865L;
+
     public DunderException() {
         super();
     }

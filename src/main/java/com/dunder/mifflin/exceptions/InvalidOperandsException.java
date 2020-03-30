@@ -1,6 +1,8 @@
 package com.dunder.mifflin.exceptions;
 
 public class InvalidOperandsException extends DunderException {
+    private static final long serialVersionUID = 5985948491677794497L;
+
     public InvalidOperandsException() {
         super();
     }
